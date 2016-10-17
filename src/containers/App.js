@@ -1,8 +1,34 @@
 import React, {Component} from 'react';
+import {connect} from 'react-redux';
+import { bindActionCreators } from 'redux';
+import User from '../components/User';
+import Page from '../components/Page';
+import * as pageActions from '../actions/PageActions';
 
-export default class App extends Component {
+class App extends Component {
 
   render() {
-    return <div>App containers</div>
+    const {user, page} = this.props;
+    const {setYear} = this.props.pageActions;
+
+    return <div className='row'>
+      <User name={user.name} />
+      <Page photos={page.photos} year={page.year} setYear={setYear} />
+    </div>
   }
 }
+
+function mapStateToProps(state) {
+  return {
+    user: state.user,
+    page: state.page
+  }
+}
+
+function mapDispatchToProps(dispatch) {
+  return {
+    pageActions: bindActionCreators(pageActions, dispatch)
+  };
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(App)
